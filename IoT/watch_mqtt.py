@@ -1,26 +1,12 @@
-'''
-/*
- * Copyright 2010-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
- '''
-
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import logging
 import time
 import json
+import boto3
+import pyaudio
 
-AllowedActions = ['both', 'publish', 'subscribe']
+polly = boto3.client("polly", region_name=region)
+pya = pyaudio.PyAudio()
 
 # Custom MQTT message callback
 def customCallback(client, userdata, message):
@@ -29,6 +15,27 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
+
+def speak(text, voice="Joanna")
+    try:
+        # Request speech synthesis
+        response = polly.synthesize_speech(Text=text_string,
+            TextType="text", OutputFormat="pcm", VoiceId=voice)
+    except (BotoCoreError, ClientError) as error:
+        # The service returned an error, exit gracefully
+        print(error)
+        exit(-1)
+    # Access the audio stream from the response
+    if "AudioStream" in response:
+        stream = pya.open(format=pya.get_format_from_width(width=2), channels=1, rate=16000, output=True)
+        stream.write(response['AudioStream'].read())
+        sleep(1)
+        stream.stop_stream()
+        stream.close()
+    else:
+        # The response didn't contain audio data, return False
+        print("Could not stream audio")
+        return(False)
 
 host = 'a2lmtd0lp0ntdm-ats.iot.eu-west-1.amazonaws.com'
 rootCAPath = '/home/pi/IoT/MQTT/certs/root_ca.pem'
@@ -65,7 +72,7 @@ myAWSIoTMQTTClient.connect()
 myAWSIoTMQTTClient.subscribe(topic, 1, customCallback)
 time.sleep(2)
 
-# Publish to the same topic in a loop forever
+# Loop forever
 loopCount = 0
 while True:
     time.sleep(1)
