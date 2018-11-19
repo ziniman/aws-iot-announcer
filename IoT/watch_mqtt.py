@@ -15,6 +15,7 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
+    
 
 def speak(text, voice="Joanna")
     try:
