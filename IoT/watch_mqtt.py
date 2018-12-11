@@ -1,12 +1,18 @@
+#! /usr/bin/env python
+
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import logging
 import time
 import json
 import boto3
-import pyaudio
+from botocore.exceptions import BotoCoreError, ClientError
+import os
+import random
+import pygame
 
+region = 'eu-west-1'
 polly = boto3.client("polly", region_name=region)
-pya = pyaudio.PyAudio()
+script_path = os.path.dirname(__file__)
 
 # Custom MQTT message callback
 def customCallback(client, userdata, message):
@@ -15,24 +21,42 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
-    
+    data = json.loads(message.payload)
+    tts = data["tts"]
+    voices = ["Joey", "Matthew", "Joanna", "Kendra", "Salli", "Brian", "Amy"]
+    voice = voices[random.randrange(len(voices))]
+    print("Calling TTS with %s [%s]" % (tts, voice))
+    speak (tts, voice)
 
-def speak(text, voice="Joanna")
+
+def speak(text_string, voice="Joanna"):
     try:
         # Request speech synthesis
+        text_string = '<speak><amazon:effect name="drc">%s</amazon:effect></speak>' % text_string
         response = polly.synthesize_speech(Text=text_string,
-            TextType="text", OutputFormat="pcm", VoiceId=voice)
+            TextType="ssml", OutputFormat="mp3", VoiceId=voice)
     except (BotoCoreError, ClientError) as error:
         # The service returned an error, exit gracefully
         print(error)
         exit(-1)
     # Access the audio stream from the response
+    print (response)
     if "AudioStream" in response:
-        stream = pya.open(format=pya.get_format_from_width(width=2), channels=1, rate=16000, output=True)
-        stream.write(response['AudioStream'].read())
-        sleep(1)
-        stream.stop_stream()
-        stream.close()
+        file = open('%s/speech.mp3' % script_path, 'w')
+        file.write(response['AudioStream'].read())
+        file.close()
+        pygame.mixer.init(48000, -16, 1, 1024)
+        pygame.mixer.music.load('%s/ding.mp3' % script_path)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            time.sleep(1)
+
+        pygame.mixer.music.load('%s/speech.mp3' % script_path)
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            time.sleep(1)
+
+        pygame.mixer.quit()#os.system('mpg123 -m ding.mp3 speech.mp3 &')
     else:
         # The response didn't contain audio data, return False
         print("Could not stream audio")
