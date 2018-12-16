@@ -10,9 +10,9 @@ logger.setLevel(logging.INFO)
 from_zone = tz.gettz('UTC')
 to_zone = tz.gettz('Asia/Jerusalem')
 
-starts_in = {'SINGLE': 0,
+starts_in = {'SINGLE': 5,
     "DOUBLE": 2,
-    "LONG": 5
+    "LONG": 0
 }
 
 client = boto3.client('iot-data', region_name='eu-west-1')
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
     # Change topic, qos and payload
     response = client.publish(
         topic='$aws/things/Floor28_RBPi/announce',
-        qos=1,
+        qos=0,
         payload=json.dumps({"click":click_type,
             "timestamp": event_timestamp,
             "device_id": device_id,

@@ -64,8 +64,8 @@ def speak(text_string, voice="Joanna"):
 
 host = 'a2lmtd0lp0ntdm-ats.iot.eu-west-1.amazonaws.com'
 rootCAPath = '/home/pi/IoT/MQTT/certs/root_ca.pem'
-certificatePath = '/home/pi/IoT/MQTT/certs/0731350cf7-certificate.pem.crt'
-privateKeyPath = '/home/pi/IoT/MQTT/certs/0731350cf7-private.pem.key'
+certificatePath = '/home/pi/IoT/MQTT/certs/2b0eccd4d9-certificate.pem.crt'
+privateKeyPath = '/home/pi/IoT/MQTT/certs/2b0eccd4d9-private.pem.key'
 port = 8883
 useWebsocket = False
 clientId = 'Floor28Announcer'
@@ -94,7 +94,7 @@ myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 # Connect and subscribe to AWS IoT
 myAWSIoTMQTTClient.connect()
-myAWSIoTMQTTClient.subscribe(topic, 1, customCallback)
+myAWSIoTMQTTClient.subscribe(topic, 0, customCallback)
 time.sleep(2)
 
 # Loop forever
