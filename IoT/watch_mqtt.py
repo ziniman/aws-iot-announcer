@@ -64,8 +64,8 @@ def speak(text_string, voice="Joanna"):
 
 host = 'a2lmtd0lp0ntdm-ats.iot.eu-west-1.amazonaws.com'
 rootCAPath = '/home/pi/IoT/MQTT/certs/root_ca.pem'
-certificatePath = '/home/pi/IoT/MQTT/certs/2b0eccd4d9-certificate.pem.crt'
-privateKeyPath = '/home/pi/IoT/MQTT/certs/2b0eccd4d9-private.pem.key'
+certificatePath = '/home/pi/IoT/MQTT/certs/149957f193-certificate.pem.crt'
+privateKeyPath = '/home/pi/IoT/MQTT/certs/149957f193-private.pem.key'
 port = 8883
 useWebsocket = False
 clientId = 'Floor28Announcer'
