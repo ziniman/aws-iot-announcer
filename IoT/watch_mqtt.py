@@ -46,7 +46,7 @@ def speak(text_string, voice="Joanna"):
         file.write(response['AudioStream'].read())
         file.close()
         pygame.mixer.init(48000, -16, 1, 1024)
-        pygame.mixer.music.load('%s/ding.mp3' % script_path)
+        pygame.mixer.music.load('%s/ding.ogg' % script_path)
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
             time.sleep(1)
