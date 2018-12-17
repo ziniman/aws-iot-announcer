@@ -1,3 +1,4 @@
 .DS_Store
 .mp3
-IoT/certs/*
+IoT/certs/*.key
+IoT/certs/*.crt

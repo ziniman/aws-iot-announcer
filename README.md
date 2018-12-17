@@ -7,7 +7,7 @@ This folder includes the code running on the RaspberryPi device.
 ### IoT Requirements
 This part of the app is running on a RaspberryPi (Tested on Model B+ and above) and require the following components to run the code:
 
-#### pip (only on RaspberryPi minimal installation)
+#### pip (only on RaspberryPi light installation)
 You will need pip to install some python packages.
 ```
 sudo apt-get update
@@ -39,6 +39,12 @@ The AWS IoT Device SDK for Python allows developers to write Python script to us
 pip install AWSIoTPythonSDK
 ```
 For setup and configuration details check the [github repository](https://github.com/aws/aws-iot-device-sdk-python).
+
+#### pygame setup (RaspberryPi lite version only)
+Make sure you install pygame to be able to play sounds from your python code.
+```
+sudo apt-get install python-pygame
+```
 
 ### IoT Security & Certificates
 To enable a secure connection between your RaspberryPi and AWS IoT, you have to download and install AWS IoT core certificates on your device.
